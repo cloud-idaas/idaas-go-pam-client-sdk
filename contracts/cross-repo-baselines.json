@@ -1,0 +1,17 @@
+{
+  "java": {
+    "repository": "cloud-idaas/idaas-java-pam-client-sdk",
+    "ref": "d9ea1c9d5188bdca601295e76c6e4331aae7bca4",
+    "source": "idaas-java-pam-client/src/main/java/com/cloud_idaas/pam/IDaaSPamClient.java"
+  },
+  "python": {
+    "repository": "cloud-idaas/idaas-python-pam-client-sdk",
+    "ref": "a2957370a7f9d58a5d60d350a5ceb2dc02cf47f8",
+    "source": "cloud_idaas/pam_client/idaas_pam_client.py"
+  },
+  "typescript": {
+    "repository": "cloud-idaas/idaas-typescript-pam-client-sdk",
+    "ref": "e65c78aeccdc83b0c5d47809658472eb3d9566c0",
+    "source": "src/client.ts"
+  }
+}

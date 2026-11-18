@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 1,
+  "basePath": "/v2/{instanceId}",
+  "clients": {
+    "go": "pam.Client",
+    "java": "com.cloud_idaas.pam.IDaaSPamClient",
+    "python": "cloud_idaas.pam_client.IDaaSPamClient",
+    "typescript": "IDaaSPamClient"
+  },
+  "operations": [
+    {
+      "id": "getApiKey",
+      "bindings": {
+        "go": "GetAPIKey",
+        "java": "getApiKey",
+        "python": "get_api_key",
+        "typescript": "getApiKey"
+      },
+      "http": {
+        "method": "GET",
+        "path": "/credentials/_/actions/obtain",
+        "bearer": true
+      },
+      "required": [
+        "credentialIdentifier"
+      ],
+      "result": "nullableApiKey",
+      "optional": [],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "generateJwtAuthenticationToken",
+      "bindings": {
+        "go": "GenerateJWTAuthenticationToken",
+        "java": "generateJwtAuthenticationToken",
+        "python": "generate_jwt_authentication_token",
+        "typescript": "generateJwtAuthenticationToken"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/generateJwt",
+        "bearer": true
+      },
+      "required": [
+        "credentialProviderIdentifier",
+        "subject",
+        "audiences"
+      ],
+      "result": "jwtTokenResponse",
+      "optional": [
+        "issuer",
+        "customClaims",
+        "expiration",
+        "includeDerivedShortToken"
+      ],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "obtainJwtAuthenticationToken",
+      "bindings": {
+        "go": "ObtainJWTAuthenticationToken",
+        "java": "obtainJwtAuthenticationToken",
+        "python": "obtain_jwt_authentication_token",
+        "typescript": "obtainJwtAuthenticationToken"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/obtainJwt",
+        "bearer": true
+      },
+      "required": [
+        "consumerId",
+        "authenticationTokenId"
+      ],
+      "result": "jwtContent",
+      "optional": [],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "obtainJwtAuthenticationTokenByDerivedShortToken",
+      "bindings": {
+        "go": "ObtainJWTAuthenticationTokenByDerivedShortToken",
+        "java": "obtainJwtAuthenticationTokenByDerivedShortToken",
+        "python": "obtain_jwt_authentication_token_by_derived_short_token",
+        "typescript": "obtainJwtAuthenticationTokenByDerivedShortToken"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/obtainJwtByDerivedShortToken",
+        "bearer": false
+      },
+      "required": [
+        "derivedShortToken"
+      ],
+      "result": "jwtContent",
+      "optional": [],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "listAuthenticationTokens",
+      "bindings": {
+        "go": "ListAuthenticationTokens",
+        "java": "listAuthenticationTokens",
+        "python": "list_authentication_tokens",
+        "typescript": "listAuthenticationTokens"
+      },
+      "http": {
+        "method": "GET",
+        "path": "/authenticationTokens",
+        "bearer": true
+      },
+      "required": [
+        "consumerId",
+        "credentialProviderIdentifier"
+      ],
+      "result": "authenticationTokenPage",
+      "optional": [
+        "nextToken",
+        "maxResults",
+        "revoked",
+        "expired"
+      ],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "validateAuthenticationToken",
+      "bindings": {
+        "go": "ValidateAuthenticationToken",
+        "java": "validateAuthenticationToken",
+        "python": "validate_authentication_token",
+        "typescript": "validateAuthenticationToken"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/validate",
+        "bearer": false
+      },
+      "required": [
+        "token"
+      ],
+      "result": "boolean",
+      "optional": [
+        "token_type_hint"
+      ],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "revokeAuthenticationToken",
+      "bindings": {
+        "go": "RevokeAuthenticationToken",
+        "java": "revokeAuthenticationToken",
+        "python": "revoke_authentication_token",
+        "typescript": "revokeAuthenticationToken"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/revoke",
+        "bearer": true
+      },
+      "required": [
+        "token"
+      ],
+      "result": "void",
+      "optional": [
+        "token_type_hint"
+      ],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "reinstateAuthenticationToken",
+      "bindings": {
+        "go": "ReinstateAuthenticationToken",
+        "java": "reinstateAuthenticationToken",
+        "python": "reinstate_authentication_token",
+        "typescript": "reinstateAuthenticationToken"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/reinstate",
+        "bearer": true
+      },
+      "required": [
+        "token"
+      ],
+      "result": "void",
+      "optional": [
+        "token_type_hint"
+      ],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "revokeAuthenticationTokenByConsumer",
+      "bindings": {
+        "go": "RevokeAuthenticationTokenByConsumer",
+        "java": "revokeAuthenticationTokenByConsumer",
+        "python": "revoke_authentication_token_by_consumer",
+        "typescript": "revokeAuthenticationTokenByConsumer"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/revokeByConsumer",
+        "bearer": true
+      },
+      "required": [
+        "consumerId",
+        "credentialProviderIdentifier"
+      ],
+      "result": "void",
+      "optional": [],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "reinstateAuthenticationTokenByConsumer",
+      "bindings": {
+        "go": "ReinstateAuthenticationTokenByConsumer",
+        "java": "reinstateAuthenticationTokenByConsumer",
+        "python": "reinstate_authentication_token_by_consumer",
+        "typescript": "reinstateAuthenticationTokenByConsumer"
+      },
+      "http": {
+        "method": "POST",
+        "path": "/authenticationTokens/_/actions/reinstateByConsumer",
+        "bearer": true
+      },
+      "required": [
+        "consumerId",
+        "credentialProviderIdentifier"
+      ],
+      "result": "void",
+      "optional": [],
+      "implementedIn": [
+        "go",
+        "java",
+        "python",
+        "typescript"
+      ]
+    },
+    {
+      "id": "obtainAccessCredential",
+      "bindings": {
+        "go": "ObtainAccessCredential",
+        "java": "obtainAccessCredential",
+        "python": "obtain_access_credential",
+        "typescript": "obtainAccessCredential"
+      },
+      "http": {
+        "method": "GET",
+        "path": "/cloudAccountRoles/_/actions/obtainAccessCredential",
+        "bearer": true
+      },
+      "required": [
+        "cloudAccountRoleExternalId"
+      ],
+      "result": "cloudAccountRoleAccessCredential",
+      "optional": [],
+      "implementedIn": [
+        "go",
+        "typescript"
+      ]
+    }
+  ],
+  "requestRules": {
+    "expiration": {
+      "kind": "integer",
+      "unit": "seconds",
+      "minimum": 1,
+      "maximum": 315360000,
+      "omitted": "service default"
+    },
+    "customClaims": {
+      "kind": "object",
+      "maximumUtf8JsonBytes": 16384,
+      "omitted": "omit field",
+      "emptyObject": "send empty object"
+    },
+    "maxResults": {
+      "kind": "int64",
+      "minimum": 1,
+      "omitted": "service default"
+    },
+    "optionalBoolean": {
+      "fields": [
+        "includeDerivedShortToken",
+        "revoked",
+        "expired"
+      ],
+      "omitted": "omit field",
+      "explicitFalse": "send false"
+    },
+    "tokenTypeHint": {
+      "wireName": "token_type_hint",
+      "omitted": "omit field",
+      "provided": "nonblank string"
+    }
+  },
+  "responseRules": {
+    "integers": "signed int64 without floating-point conversion",
+    "timestampUnits": {
+      "createTime": "Unix milliseconds",
+      "updateTime": "Unix milliseconds",
+      "expirationTime": "Unix milliseconds",
+      "accessCredentialExpiresAt": "Unix seconds",
+      "expiredTime": "Unix seconds"
+    },
+    "invalidResponse": {
+      "coreType": "CredentialError",
+      "errorCode": "InvalidResponse",
+      "requestId": "retain service request ID when available"
+    },
+    "apiKey": {
+      "explicitApiKeyContentNull": "nil result without error",
+      "missingOrInvalidBusinessField": "InvalidResponse"
+    },
+    "tokenValidation": {
+      "activeFalse": "false result without error",
+      "missingOrNonbooleanActive": "InvalidResponse"
+    },
+    "pagination": {
+      "emptyEntities": "non-nil empty slice",
+      "missingEntities": "allowed only with totalCount=0, a valid maxResults, and no next page",
+      "nullEntities": "InvalidResponse",
+      "nextTokenEnd": [
+        "absent",
+        "null",
+        "empty string"
+      ]
+    },
+    "unknownFields": "ignore",
+    "jsonDecodingFailure": {
+      "coreType": "EncodingError",
+      "errorCode": "DecodeFailed",
+      "requestId": "retain service request ID when available"
+    }
+  }
+}

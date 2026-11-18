@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "clients": {
+    "go": {
+      "type": "Client",
+      "explicit": "NewClient",
+      "default": "NewDefaultClient",
+      "builderType": "Builder",
+      "builderFactory": "NewBuilder",
+      "build": "Build"
+    },
+    "java": {
+      "type": "IDaaSPamClient",
+      "builderFactory": "builder",
+      "build": "build",
+      "builderType": "IDaaSPamClient.IDaaSPamClientBuilder",
+      "constructors": [
+        {
+          "parameters": [],
+          "required": 0
+        },
+        {
+          "parameters": [
+            "developerApiEndpoint",
+            "idaasInstanceId",
+            "credentialProvider"
+          ],
+          "required": 3
+        }
+      ]
+    },
+    "python": {
+      "type": "IDaaSPamClient",
+      "builderFactory": "builder",
+      "build": "build",
+      "builderType": "IDaaSPamClient.IDaaSPamClientBuilder",
+      "constructors": [
+        {
+          "parameters": [
+            "developer_api_endpoint",
+            "idaas_instance_id",
+            "credential_provider"
+          ],
+          "required": 0
+        }
+      ]
+    },
+    "typescript": {
+      "type": "IDaaSPamClient",
+      "builderFactory": "builder",
+      "build": "build",
+      "builderType": "PamClientBuilder",
+      "constructors": [
+        {
+          "parameters": [
+            "options"
+          ],
+          "required": 0
+        }
+      ]
+    }
+  },
+  "fields": [
+    {
+      "id": "developerApiEndpoint",
+      "bindings": {
+        "go": "DeveloperAPIEndpoint",
+        "java": "developerApiEndpoint",
+        "python": "developer_api_endpoint",
+        "typescript": "developerApiEndpoint"
+      }
+    },
+    {
+      "id": "idaasInstanceId",
+      "bindings": {
+        "go": "IDaaSInstanceID",
+        "java": "idaasInstanceId",
+        "python": "idaas_instance_id",
+        "typescript": "idaasInstanceId"
+      }
+    },
+    {
+      "id": "credentialProvider",
+      "bindings": {
+        "go": "CredentialProvider",
+        "java": "credentialProvider",
+        "python": "credential_provider",
+        "typescript": "credentialProvider"
+      }
+    },
+    {
+      "id": "httpClient",
+      "bindings": {
+        "go": "HTTPClient",
+        "typescript": "httpClient"
+      }
+    },
+    {
+      "id": "httpConfiguration",
+      "bindings": {
+        "go": "HTTPConfiguration"
+      }
+    },
+    {
+      "id": "logger",
+      "bindings": {
+        "go": "Logger"
+      }
+    }
+  ]
+}

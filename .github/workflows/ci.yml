@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cross-repository-names:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [java, python, typescript]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install source check tools
+        run: python -m pip install -r scripts/requirements-contracts.txt
+      - name: Source checker regression tests
+        run: |
+          python -m coverage run --branch --source=check_cross_repo_contract -m unittest discover -s scripts -p 'test_*.py'
+          python -m coverage report --fail-under=80
+      - name: Read pinned baseline
+        id: baseline
+        env:
+          CONTRACT_LANGUAGE: ${{ matrix.language }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          baseline = json.loads(Path('contracts/cross-repo-baselines.json').read_text())[os.environ['CONTRACT_LANGUAGE']]
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              for key in ('repository', 'ref'):
+                  print(f'{key}={baseline[key]}', file=output)
+          PY
+      - uses: actions/checkout@v5
+        with:
+          repository: ${{ steps.baseline.outputs.repository }}
+          ref: ${{ steps.baseline.outputs.ref }}
+          path: .crossrepo/${{ matrix.language }}
+          persist-credentials: false
+      - name: Verify mapped public names against source
+        env:
+          CONTRACT_LANGUAGE: ${{ matrix.language }}
+        run: python scripts/check_cross_repo_contract.py --language "$CONTRACT_LANGUAGE" --repo ".crossrepo/$CONTRACT_LANGUAGE"
+
+  compatibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.18.10', '1.26.11', '1.27.4']
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go }}
+          cache-dependency-path: go.sum
+      - run: go version
+      - run: go mod verify
+      - run: go build ./...
+      - run: go vet ./...
+      - run: go test -count=1 ./...
+
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.4'
+          cache-dependency-path: go.sum
+      - name: Formatting
+        run: test -z "$(gofmt -l .)"
+      - name: Module identity and portable dependencies
+        run: |
+          test "$(go list -m)" = 'github.com/cloud-idaas/idaas-go-pam-client-sdk'
+          test -z "$(go list -m -f '{{if .Replace}}{{.Path}}{{end}}' all)"
+      - name: Race and statement coverage
+        run: |
+          go test -race -count=1 -coverpkg=github.com/cloud-idaas/idaas-go-pam-client-sdk -coverprofile=coverage.out ./...
+          go tool cover -func=coverage.out | awk '/^total:/ { if (($3 + 0) < 90) exit 1; found=1 } END { if (!found) exit 1 }'
+      - name: Dependency vulnerability check
+        run: |
+          go install golang.org/x/vuln/cmd/govulncheck@v1.10.0
+          govulncheck ./...
+      - name: Independent consumer
+        run: |
+          sdk_root="$PWD"
+          consumer_dir="$(mktemp -d)"
+          cd "$consumer_dir"
+          go mod init example.com/pam-consumer
+          go mod edit -replace "github.com/cloud-idaas/idaas-go-pam-client-sdk=$sdk_root"
+          cp "$sdk_root/testdata/consumer/consumer_test.go" ./consumer_test.go
+          go mod tidy
+          go test ./...
+
+  default-transport-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.27.4'
+          cache-dependency-path: go.sum
+      - name: Actual default transport security regression
+        run: go test -tags=pam_transport_security -race -count=1 -timeout=60s -run '^TestDefaultTransport' ./...
+
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.26.11'
+          cache-dependency-path: go.sum
+      - name: Pinned lint tool
+        run: |
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.62.0
+          golangci-lint run --build-tags=pam_transport_security ./...

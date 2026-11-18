@@ -1,0 +1,7 @@
+coverage.out
+coverage.html
+*.test
+.DS_Store
+.coverage
+.crossrepo/
+__pycache__/

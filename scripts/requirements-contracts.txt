@@ -1,0 +1,5 @@
+# Development-only source parsers and test coverage; no SDK runtime dependency.
+tree-sitter==0.25.2
+tree-sitter-java==0.23.5
+tree-sitter-typescript==0.23.2
+coverage==7.10.7
